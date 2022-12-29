@@ -1,36 +1,16 @@
 import argparse
 import sys
+import re
 
-def read_file(filename):
-    with open(filename) as file:
-        return file.readlines()
-
-def url_parser(url):
-    
-    parts = urlparse(url)
-    directories = parts.path.strip('/').split('/')
-    queries = parts.query.strip('&').split('&')
-    
-    elements = {
-        'scheme': parts.scheme,
-        'netloc': parts.netloc,
-        'path': parts.path,
-        'params': parts.params,
-        'query': parts.query,
-        'fragment': parts.fragment,
-        'directories': directories,
-        'queries': queries,
-    }
-    return elements
-
-def main():
-    parser = argparse.ArgumentParser()
-    parser.add_argument('-i', default='input.txt', help='input.txt')
-    args = parser.parse_args()
-    print(args)
-    try:
-        url = read_file(filename)
-        parsed = url_parser(url)
-        print(parsed)
-    except:
-        sys.exit(err)    
+# Ouvrez le fichier en mode lecture
+with open(sys.argv[1], 'r') as f:
+    # Parcourez chaque ligne du fichier
+    for ligne in f:
+        # Utilisez une expression régulière pour trouver les URL dans la ligne
+        resultats = re.findall(r'https?://(?:[-\w.]|(?:%[\da-fA-F]{2}))+', ligne)
+        # Affichez chaque URL trouvée
+        for url in resultats:
+            site = url.split('/', 2)
+            with open('onionSite.txt', 'a') as f:
+                for item in resultats:
+                    f.write("%s\n" % site[2])
